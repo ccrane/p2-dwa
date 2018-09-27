@@ -1,3 +1,5 @@
+<?php require 'inc/logic.php' ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +23,7 @@
         <div class="col-6">
             <h2 class="text-center">Currency Converter</h2>
             <p>Use the currency converter below to convert any amount between different national currencies using the average rate for a given period.</p>
-            <form action="index.php" method="POST">
+            <form action="convert.php" method="POST">
                 <div class="form-group">
                     <label for="convertFrom">From:</label>
                     <select class="form-control" id="convertFrom" name="convertFrom">
@@ -54,15 +56,15 @@
                 <div class="form-group">
                     <Label>Average Rate Period</label><br/>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="dailyAverage" name="period" value="daily">
+                        <input class="form-check-input" type="radio" id="dailyAverage" name="period" value="Daily" checked>
                         <label class="form-check-label" for="dailyAverage">Daily</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="weeklyAverage" name="period" value="weekly">
+                        <input class="form-check-input" type="radio" id="weeklyAverage" name="period" value="Weekly">
                         <label class="form-check-label" for="weeklyAverage">Weekly</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="monthlyAverage" name="period" value="monthly">
+                        <input class="form-check-input" type="radio" id="monthlyAverage" name="period" value="Monthly">
                         <label class="form-check-label" for="monthlyAverage">Monthly</label>
                     </div>
                     <div class="form-check form-check-inline">
@@ -70,11 +72,11 @@
                                type="radio"
                                id="sixMonthAverage"
                                name="period"
-                               value="sixmonths">
+                               value="Six Month">
                         <label class="form-check-label" for="sixMonthAverage">Six Months</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="yearlyAverage" name="period" value="yearly">
+                        <input class="form-check-input" type="radio" id="yearlyAverage" name="period" value="Yearly">
                         <label class="form-check-label" for="yearlyAverage">Yearly</label>
                     </div>
                 </div>
@@ -82,11 +84,14 @@
                     <button type="submit" name="convert" class="btn btn-primary">Convert</button>
                 </div>
             </form>
-            <?php if (isset($_POST["convert"])): ?>
+            <?php if (isset($results)): ?>
                 <div class="alert alert-success" role="alert">
-                    <pre>
-                        <?php var_dump($_POST); ?>
-                    </pre>
+                    <p class="text-center">
+                        Using the <strong><?= $results["period"] ?></strong> noon average exchange rate
+                    </p>
+                    <p class="text-center">
+                        <strong><?= $results["amountToConvert"] . " " . $results["convertFrom"] ?></strong> is equivalent to  <strong><?= $results["convertedAmount"] . " " . $results["convertTo"]?></strong>.
+                    </p>
                 </div>
             <?php endif; ?>
         </div>
