@@ -87,10 +87,10 @@
             <?php if (isset($results)): ?>
                 <div class="alert alert-success" role="alert">
                     <p class="text-center">
-                        Using the <strong><?= $results["period"] ?></strong> noon average exchange rate
+                        Using the <strong><?= $results["period"] ?></strong> average exchange rate <?= $results["averageConversionRate"] ?>
                     </p>
                     <p class="text-center">
-                        <strong><?= $results["amountToConvert"] . " " . $results["convertFrom"] ?></strong> is equivalent to  <strong><?= $results["convertedAmount"] . " " . $results["convertTo"]?></strong>.
+                        <strong><?= $results["amountToConvert"] . " " . $results["convertFrom"] ?></strong> is equivalent to  <strong><?= number_format($results["convertedAmount"], 2) ?> <?= $results["convertTo"] ?></strong>
                     </p>
                 </div>
             <?php endif; ?>

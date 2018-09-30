@@ -1,4 +1,10 @@
 <?php
+require 'inc/helpers.php';
+require 'inc/Form.php';
+require 'FixerAPI.php';
+
+use DWA\P2\FixerAPI;
+
 # Start the session
 session_start();
 
@@ -7,9 +13,16 @@ $convertTo = $_POST['convertTo'] ?? false;
 $amountToConvert = $_POST['amountToConvert'] ?? false;
 $period = $_POST['period'] ?? false;
 
-if ($convertFrom && $convertTo && $amount && $period) {
-    # connect to BOC valet endpoint and retrieve conversion rates.
+$convertedAmount = 0;
+$averageConversionRate = 0;
+
+if ($convertFrom && $convertTo && $convertTo && $period) {
+    # connect to Fixer API endpoint and retrieve conversion rates.
     # calculate converted amount
+    $fixer = new FixerAPI($convertFrom, $convertTo, $period, $amountToConvert);
+
+    $convertedAmount = $fixer->convert();
+    $averageConversionRate = $fixer->getAverageConversionRate();
 }
 
 # Store our results in the session
@@ -18,7 +31,8 @@ $_SESSION['results'] = [
     'convertTo' => $convertTo,
     'amountToConvert' => $amountToConvert,
     'period' => $period,
-    'convertedAmount' => '???'
+    'convertedAmount' => $convertedAmount,
+    'averageConversionRate' => $averageConversionRate
 ];
 
 # Redirect back main converter UI

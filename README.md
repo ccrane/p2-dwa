@@ -5,6 +5,7 @@
 ## Outside resources
 + [Bootstrap 4.1.3](https://getbootstrap.com/docs/4.1/getting-started/introduction/)
 + [jQuery 3.1.1 (*required for Bootstrap*)](https://jquery.com/download/)
++ [Bank of Canada Valet API - *Foreign Exchange*](https://www.bankofcanada.ca/valet/docs)
 
 ## 3 Unique inputs
 1. Select input used to choose currencies to convert from and to.
