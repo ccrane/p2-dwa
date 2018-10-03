@@ -1,4 +1,7 @@
-<?php require 'inc/logic.php'; ?>
+<?php
+require 'inc/logic.php';
+require 'inc/helpers.php';
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -60,7 +63,7 @@
                                        id="amountToConvert"
                                        name="amountToConvert"
                                        min="1"
-                                       value="<?= isset($amountToConvert) ? $amountToConvert : "1.00" ?>"
+                                       value="<?= isset($amountToConvert) ? sanitize($amountToConvert) : "1.00" ?>"
                                        required>
                             </div>
                         </div>
@@ -134,7 +137,8 @@
                             <hr>
                             <p class="text-center">
                                 Using the
-                                <strong><?= $period ?></strong> average exchange rate <strong><?= $results["averageConversionRate"] ?></strong>
+                                <strong><?= $period ?></strong> average exchange rate
+                                <strong><?= $results["averageConversionRate"] ?></strong>
                             </p>
                             <p class="text-center">
                                 <strong><?= $amountToConvert . " " . $convertFrom ?></strong> is equivalent to

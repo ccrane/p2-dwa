@@ -98,7 +98,6 @@ class FixerAPI
 
     /**
      * Converts the given amount using average rate for the given period.
-     *
      * @return float
      */
     public function convert()
@@ -123,7 +122,6 @@ class FixerAPI
 
     /**
      * Get Foreign Exchanges rates for a given period.
-     *
      * @return array
      */
     private function getForeignExchangeRates()
@@ -154,7 +152,6 @@ class FixerAPI
 
     /**
      * Returns the timeseries endpoint url based on the given period.
-     *
      * @return string
      */
     private function buildTimeSeriesEndpointURL()
@@ -193,7 +190,6 @@ class FixerAPI
 
     /**
      * Gets all supported currencies
-     *
      * @return array
      */
     public static function getSupportedSymbols()

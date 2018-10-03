@@ -3,7 +3,6 @@ require 'FixerAPI.php';
 
 use DWA\P2\FixerAPI;
 
-
 # Start the session, since we'll be using it below
 session_start();
 

@@ -21,4 +21,4 @@
 *None*
 
 ## Notes for instructor
-*any notes for me to refer to while grading; if none, omit this section*
+*None*
