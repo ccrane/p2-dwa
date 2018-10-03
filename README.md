@@ -5,7 +5,7 @@
 ## Outside resources
 + [Bootstrap 4.1.3](https://getbootstrap.com/docs/4.1/getting-started/introduction/)
 + [jQuery 3.1.1 (*required for Bootstrap*)](https://jquery.com/download/)
-+ [Bank of Canada Valet API - *Foreign Exchange*](https://www.bankofcanada.ca/valet/docs)
++ [Fixer.io - *Foreign Exchange*](https://fixer.io)
 
 ## 3 Unique inputs
 1. Select input used to choose currencies to convert from and to.
@@ -14,9 +14,11 @@
 
 ## Class
 *List the name of the class you're using, e.g. `Form.php`, `Password.php`, etc.*
++ Form.php
++ FixerAPI.php
 
 ## Code style divergences
-*list any divergences from PSR-1/PSR-2 and course guidelines on code style*
+*None*
 
 ## Notes for instructor
 *any notes for me to refer to while grading; if none, omit this section*
