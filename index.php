@@ -1,4 +1,4 @@
-<?php require 'inc/logic.php' ?>
+<?php require 'inc/logic.php'; ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -27,21 +27,19 @@
                 <div class="form-group">
                     <label for="convertFrom">From:</label>
                     <select class="form-control" id="convertFrom" name="convertFrom">
-                        <option value="USD" selected>US Dollar (USD)</option>
-                        <option value="CAD">Canadian Dollar (CAD)</option>
-                        <option value="GBP">British Pound (GBP)</option>
-                        <option value="AUD">Australian Dollar (AUD)</option>
-                        <option value="EUR">Euro (EUR)</option>
+                        <option value=""> --- Select Currency ---</option>
+                        <?php foreach ($supportedSymbols as $symbol => $name) : ?>
+                            <option value="<?= $symbol ?>" <?= (isset($convertFrom) && ($convertFrom == $symbol)) ? " selected" : "" ?>><?= $name ?> (<?= $symbol ?>)</option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="convertTo">To:</label>
                     <select class="form-control" id="convertTo" name="convertTo">
-                        <option value="USD">US Dollar (USD)</option>
-                        <option value="CAD" selected>Canadian Dollar (CAD)</option>
-                        <option value="GBP">British Pound (GBP)</option>
-                        <option value="AUD">Australian Dollar (AUD)</option>
-                        <option value="EUR">Euro (EUR)</option>
+                        <option value=""> --- Select Currency ---</option>
+                        <?php foreach ($supportedSymbols as $symbol => $name) : ?>
+                            <option value="<?= $symbol ?>"<?= (isset($convertTo) && ($convertTo == $symbol)) ? " selected" : "" ?>><?= $name ?> (<?= $symbol ?>)</option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
                 <div class="form-group">
@@ -51,20 +49,25 @@
                            id="amountToConvert"
                            name="amountToConvert"
                            min="1"
-                           value="1.00">
+                           value="<?= isset($amountToConvert) ? $amountToConvert : "1.00" ?>">
                 </div>
                 <div class="form-group">
                     <Label>Average Rate Period</label><br/>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="dailyAverage" name="period" value="Daily" checked>
+                        <input class="form-check-input"
+                               type="radio"
+                               id="dailyAverage"
+                               name="period"
+                               value="Daily"
+                               <?= (isset($period) && (strtoupper($period) == 'DAILY')) ? " checked" : "" ?>>
                         <label class="form-check-label" for="dailyAverage">Daily</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="weeklyAverage" name="period" value="Weekly">
+                        <input class="form-check-input" type="radio" id="weeklyAverage" name="period" value="Weekly" <?= (isset($period) && (strtoupper($period) == 'WEEKLY')) ? " checked" : "" ?>>
                         <label class="form-check-label" for="weeklyAverage">Weekly</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="monthlyAverage" name="period" value="Monthly">
+                        <input class="form-check-input" type="radio" id="monthlyAverage" name="period" value="Monthly" <?= (isset($period) && (strtoupper($period) == 'MONTHLY')) ? " checked" : "" ?>>
                         <label class="form-check-label" for="monthlyAverage">Monthly</label>
                     </div>
                     <div class="form-check form-check-inline">
@@ -72,11 +75,11 @@
                                type="radio"
                                id="sixMonthAverage"
                                name="period"
-                               value="Six Month">
+                               value="Six Month" <?= (isset($period) && (strtoupper($period) == 'SIX MONTH')) ? " checked" : "" ?>>
                         <label class="form-check-label" for="sixMonthAverage">Six Months</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="yearlyAverage" name="period" value="Yearly">
+                        <input class="form-check-input" type="radio" id="yearlyAverage" name="period" value="Yearly" <?= (isset($period) && (strtoupper($period) == 'YEARLY')) ? " checked" : "" ?>>
                         <label class="form-check-label" for="yearlyAverage">Yearly</label>
                     </div>
                 </div>
@@ -84,13 +87,24 @@
                     <button type="submit" name="convert" class="btn btn-primary">Convert</button>
                 </div>
             </form>
-            <?php if (isset($results)): ?>
+            <?php if ($hasErrors): ?>
+                <div class='alert alert-danger' role="alert">
+                    <ul>
+                        <?php foreach ($errors as $error): ?>
+                            <li><?= $error ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif ?>
+            <?php if (isset($results) && !$hasErrors): ?>
                 <div class="alert alert-success" role="alert">
                     <p class="text-center">
-                        Using the <strong><?= $results["period"] ?></strong> average exchange rate <?= $results["averageConversionRate"] ?>
+                        Using the
+                        <strong><?= $period ?></strong> average exchange rate <?= $results["averageConversionRate"] ?>
                     </p>
                     <p class="text-center">
-                        <strong><?= $results["amountToConvert"] . " " . $results["convertFrom"] ?></strong> is equivalent to  <strong><?= number_format($results["convertedAmount"], 2) ?> <?= $results["convertTo"] ?></strong>
+                        <strong><?= $amountToConvert . " " . $convertFrom ?></strong> is equivalent to
+                        <strong><?= number_format($results["convertedAmount"], 2) ?> <?= $convertTo ?></strong>
                     </p>
                 </div>
             <?php endif; ?>

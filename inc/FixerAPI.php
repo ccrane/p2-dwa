@@ -9,17 +9,35 @@ namespace DWA\P2;
 
 class FixerAPI
 {
+    /*
+     * CONSTANTS
+     */
     private const FIXER_API_BASE_URL = 'http://data.fixer.io/api/';
     private const FIXER_API_TIMESERIES_ENPOINT_URL = FixerAPI::FIXER_API_BASE_URL . 'timeseries';
     private const FIXER_API_LATEST_ENPOINT_URL = FixerAPI::FIXER_API_BASE_URL . 'latest';
+    private const FIXER_API_SYMBOLS_ENPOINT_URL = FixerAPI::FIXER_API_BASE_URL . 'symbols';
     private const FIXER_API_ACCESS_KEY = '27108040923da4cd86416d7924e9a908';
 
+    /*
+     * PROPERTIES
+     */
     private $fromCurrency;
     private $toCurrency;
     private $period;
     private $amountToConvert;
     private $averageConversionRate;
 
+    /*
+     * ++++++++++++++++++ MAGIC METHODS ++++++++++++++++++++++++
+     */
+
+    /**
+     * FixerAPI constructor.
+     * @param $fromCurrency
+     * @param $toCurrency
+     * @param $period
+     * @param $amountToConvert
+     */
     public function __construct($fromCurrency, $toCurrency, $period, $amountToConvert)
     {
         $this->fromCurrency = $fromCurrency;
@@ -29,31 +47,60 @@ class FixerAPI
         $this->averageConversionRate = 0;
     }
 
+    /*
+     * ++++++++++++++++ PUBLIC METHODS START HERE ++++++++++++++++++++++
+     */
+
+    /**
+     * Gets the currency code for the currency being converted FROM.
+     * @return string
+     */
     public function getCurrencyFrom()
     {
         return $this->fromCurrency;
     }
 
+    /**
+     * Gets the currency code for the currency being converted TO.
+     * @return string
+     */
     public function getCurrencyTo()
     {
         return $this->toCurrency;
     }
 
+    /**
+     * Gets the average rate period.
+     * @return string
+     */
     public function getPeriod()
     {
         return $this->period;
     }
 
+    /**
+     * Gets the converted amount.
+     * @return float
+     */
     public function getCovertedAmount()
     {
         return $this->amountToConvert;
     }
 
+    /**
+     * Get the calculated average exchange rate.
+     * @return int
+     */
     public function getAverageConversionRate()
     {
         return $this->averageConversionRate;
     }
 
+    /**
+     * Converts the given amount using average rate for the given period.
+     *
+     * @return float
+     */
     public function convert()
     {
         $results = $this->getForeignExchangeRates();
@@ -71,12 +118,17 @@ class FixerAPI
     }
 
     /*
-     * Get Foreign Exchanges rates
-     * @retruns
+     * +++++++++++++++ PRIVATE METHODS STARTS HERE +++++++++++++++++++
+     */
+
+    /**
+     * Get Foreign Exchanges rates for a given period.
+     *
+     * @return array
      */
     private function getForeignExchangeRates()
     {
-        $url = $this->buildEndpointURL();
+        $url = $this->buildTimeSeriesEndpointURL();
 
         $ch = curl_init();
 
@@ -100,10 +152,12 @@ class FixerAPI
         return $result_arr;
     }
 
-    /*
-     * Returns the endpoint url based on the period.
+    /**
+     * Returns the timeseries endpoint url based on the given period.
+     *
+     * @return string
      */
-    private function buildEndpointURL()
+    private function buildTimeSeriesEndpointURL()
     {
         $endPoint = FixerAPI::FIXER_API_TIMESERIES_ENPOINT_URL;
 
@@ -131,5 +185,46 @@ class FixerAPI
         $query['start_date'] = $startDate->format('Y-m-d');
 
         return $endPoint . '?' . http_build_query($query);
+    }
+
+    /*
+     * +++++++++++++ STATIC METHODS STARTS HERE ++++++++++++++++++
+     */
+
+    /**
+     * Gets all supported currencies
+     *
+     * @return array
+     */
+    public static function getSupportedSymbols()
+    {
+        $endPoint = FixerAPI::FIXER_API_SYMBOLS_ENPOINT_URL;
+
+        $query = [
+            'access_key' => FixerAPI::FIXER_API_ACCESS_KEY
+        ];
+
+        $endPoint .= ('?' . http_build_query($query));
+
+        $ch = curl_init();
+
+        // Set the url, number of GET vars, GET data
+        curl_setopt($ch, CURLOPT_URL, $endPoint);
+        curl_setopt($ch, CURLOPT_POST, false);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        // Execute request
+        $result = curl_exec($ch);
+
+        // Close connection
+        curl_close($ch);
+
+        // get the result and parse to JSON
+        $result_arr = json_decode($result, true);
+
+        return (isset($result_arr) && ($result_arr['success'] == 'true')) ? $result_arr["symbols"] : [];
     }
 }
